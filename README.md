@@ -1,4 +1,4 @@
-# AwsWebSockets
+# aws-websockets
 Easily provision an AWS API Gateway Websockets using [Serverless Components](https://github.com/serverless/components)
 
 &nbsp;
@@ -112,7 +112,7 @@ myWebsocketApig (master)$ components
 
 myWebsocketApig (master)$
 ```
-For a real world example of how this component could be used, [take a look at how the Socket component is using it](https://github.com/serverless-components/Socket/blob/master/serverless.js#L62).
+For a real world example of how this component could be used, [take a look at how the socket component is using it](https://github.com/serverless-components/socket/blob/master/serverless.js#L62).
 
 &nbsp;
 
