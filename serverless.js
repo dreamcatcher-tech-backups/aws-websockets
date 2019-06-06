@@ -45,7 +45,7 @@ class WebSockets extends Component {
       credentials: this.context.credentials.aws
     })
 
-    this.cli.status(`Deploying`)
+    this.ui.status(`Deploying`)
 
     config.id = await getApiId({ apig2, id: config.id || this.state.id }) // validate with provider
 
@@ -53,10 +53,10 @@ class WebSockets extends Component {
     const providerRoutes = await getRoutes({ apig2, id: config.id })
 
     if (!config.id) {
-      this.cli.status(`Creating`)
+      this.ui.status(`Creating`)
       config.id = await createApi({ apig2, ...config })
     } else {
-      this.cli.status(`Updating`)
+      this.ui.status(`Updating`)
       await updateApi({ apig2, ...config })
     }
 
@@ -86,7 +86,7 @@ class WebSockets extends Component {
     // if the user has changed the id,
     // remove the previous API
     if (this.state.id && this.state.id !== config.id) {
-      this.cli.status(`Replacing`)
+      this.ui.status(`Replacing`)
       await removeApi({ apig2, id: config.id })
     }
 
@@ -95,7 +95,18 @@ class WebSockets extends Component {
     await this.save()
 
     const outputs = pick(outputMask, config)
-    this.cli.outputs(outputs)
+
+    let routesOutputValue = `\n`
+    for (const route of Object.keys(outputs.routes)) {
+      routesOutputValue = `${routesOutputValue}    - ${route}\n`
+    }
+
+    this.ui.log()
+    this.ui.output('name', `  ${outputs.name}`)
+    this.ui.output('id', `    ${outputs.id}`)
+    this.ui.output('url', `   ${outputs.url}`)
+    this.ui.output('routes', `${routesOutputValue}`)
+
     return outputs
   }
 
@@ -107,7 +118,7 @@ class WebSockets extends Component {
       credentials: this.context.credentials.aws
     })
 
-    this.cli.status(`Removing`)
+    this.ui.status(`Removing`)
 
     if (config.id) {
       await removeApi({ apig2, id: config.id })
