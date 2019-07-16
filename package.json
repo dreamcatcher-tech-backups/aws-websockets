@@ -1,6 +1,6 @@
 {
   "name": "@serverless/aws-websockets",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "main": "./serverless.js",
   "publishConfig": {
     "access": "public"
