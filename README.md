@@ -14,7 +14,7 @@ Easily provision an AWS API Gateway Websockets using [Serverless Components](htt
 ### 1. Install
 
 ```console
-$ npm install -g @serverless/components
+$ npm install -g serverless
 ```
 
 ### 2. Create
@@ -29,15 +29,13 @@ the directory should look something like this:
 
 ```
 |- serverless.yml
-|- .env           # your development AWS api keys
-|- .env.prod      # your production AWS api keys
+|- .env           # your AWS api keys
 |- code
   |- handler.js   # the lambda function handler that would receive the websockets events
   |- package.json # optional
 ```
-the `.env` files are not required if you have the aws keys set globally and you want to use a single stage, but they should look like this.
-
 ```
+# .env
 AWS_ACCESS_KEY_ID=XXX
 AWS_SECRET_ACCESS_KEY=XXX
 ```
@@ -47,72 +45,31 @@ AWS_SECRET_ACCESS_KEY=XXX
 ```yml
 # serverless.yml
 
-name: my-websockets-backend
-stage: dev
-
 myLambda:
   component: "@serverless/aws-lambda"
   inputs:
-    name: my-function
     code: ./code
     handler: handler.hello
 myWebsocketApig:
   component: "@serverless/aws-websockets"
   inputs:
-    name: my-websockets-api
     description: My Websockets API
     deploymentStage: dev # AWS API Stage
     routeSelectionExpression: '$request.body.action'
     routes:
-      $connect: ${comp:myLambda.arn}
-      $disconnect: ${comp:myLambda.arn}
-      $default: ${comp:myLambda.arn}
-      message: ${comp:myLambda.arn} # you can specify any route
+      $connect: ${myLambda.arn}
+      $disconnect: ${myLambda.arn}
+      $default: ${myLambda.arn}
+      message: ${myLambda.arn} # you can specify any route
     regoin: us-east-1
 ```
 
 ### 4. Deploy
 
 ```console
-myWebsocketApig (master)$ components
-
-  myLambda › outputs:
-  name:  'my-function'
-  description:  'AWS Lambda Component'
-  memory:  512
-  timeout:  10
-  code:  './code'
-  bucket:  undefined
-  shims:  []
-  handler:  'handler.hello'
-  runtime:  'nodejs8.10'
-  env: 
-  role: 
-    name:  'my-function'
-    arn:  'arn:aws:iam::552760238299:role/my-function'
-    service:  'lambda.amazonaws.com'
-    policy:  { arn: 'arn:aws:iam::aws:policy/AdministratorAccess' }
-  arn:  'arn:aws:lambda:us-east-1:552760238299:function:my-function'
-
-  myWebsocketApig › outputs:
-  name:  'my-websockets-api'
-  deploymentStage:  'dev'
-  description:  'My Websockets API'
-  routeSelectionExpression:  '$request.body.action'
-  routes: 
-    $connect:  'arn:aws:lambda:us-east-1:552760238299:function:my-function'
-    $disconnect:  'arn:aws:lambda:us-east-1:552760238299:function:my-function'
-    $default:  'arn:aws:lambda:us-east-1:552760238299:function:my-function'
-    message:  'arn:aws:lambda:us-east-1:552760238299:function:my-function'
-  id:  'vwd0sx6f5g'
-  url:  'wss://vwd0sx6f5g.execute-api.us-east-1.amazonaws.com/dev/'
-
-
-  32s › dev › my-websockets-backend › done
-
-myWebsocketApig (master)$
+$ serverless
 ```
-For a real world example of how this component could be used, [take a look at how the socket component is using it](https://github.com/serverless-components/socket/blob/master/serverless.js#L62).
+For a real world example of how this component could be used, [take a look at how the socket component is using it](https://github.com/serverless-components/backend-socket/).
 
 &nbsp;
 
