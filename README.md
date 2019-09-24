@@ -61,7 +61,7 @@ myWebsocketApig:
       $disconnect: ${myLambda.arn}
       $default: ${myLambda.arn}
       message: ${myLambda.arn} # you can specify any route
-    regoin: us-east-1
+    region: us-east-1
 ```
 
 ### 4. Deploy
