@@ -68,6 +68,29 @@ const createIntegration = async ({ apig2, lambda, id, arn }) => {
     }
   }
 
+  // TODO add permissions on lambda role to push data down to websockets.
+  // needs the equivalent of attaching policy: AmazonAPIGatewayInvokeFullAccess:
+  // {
+  //   "Version": "2012-10-17",
+  //   "Statement": [
+  //       {
+  //           "Effect": "Allow",
+  //           "Action": [
+  //               "execute-api:ManageConnections"
+  //           ],
+  //           "Resource": "arn:aws:execute-api:${region}:${accountId}:${id}"
+  //       }
+  //   ]
+  // }
+  // call https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/Lambda.html#getFunction-property
+  // get Role param out
+  // use IAM in sdk to call https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/IAM.html#attachRolePolicy-property
+  // function should then have ability to send info back to clients
+  // should really narrow it down to the specific paths using an inline policy statement
+
+  // could specify functions as just a name, then determine arn and also set policies
+  // means do not have to set the env vars
+
   return integration.IntegrationId
 }
 
