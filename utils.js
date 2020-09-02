@@ -57,7 +57,7 @@ const createIntegration = async ({ apig2, lambda, id, arn }) => {
     FunctionName: arn,
     Principal: 'apigateway.amazonaws.com',
     SourceArn: `arn:aws:execute-api:${region}:${accountId}:${id}/*/*`,
-    StatementId: `${functionName}-websocket`
+    StatementId: `serverless-aws-websockets-${id}`
   }
 
   try {
